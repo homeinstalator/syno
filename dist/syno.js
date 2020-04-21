@@ -199,14 +199,16 @@
         
                 path = 'auth.cgi';
         
-                Auth.prototype.login = function(sessionName, done) {
-                  var method, params;
+                Auth.prototype.login = function(arg, done) {
+                  var method, otp_code, params, sessionName;
+                  sessionName = arg.sessionName, otp_code = arg.otp_code;
                   method = 'login';
                   params = {
                     account: this.syno.account,
                     passwd: this.syno.passwd,
                     session: sessionName,
-                    format: 'sid'
+                    format: 'sid',
+                    otp_code: otp_code
                   };
                   if (!this.syno.sessions) {
                     this.syno.sessions = {};
@@ -279,7 +281,8 @@
             module = {};
             exports = module.exports = {};
             (function(modules, module, exports, setModule, setter) {
-              var AuthenticatedAPI;
+              var AuthenticatedAPI, authenticator;
+              authenticator = require('otplib').authenticator;
               AuthenticatedAPI = (function(superClass) {
                 var noop;
         
@@ -292,18 +295,26 @@
                 noop = function() {};
         
                 AuthenticatedAPI.prototype.request = function(options, done) {
+                  var opt_code;
                   if (done == null) {
                     done = noop;
                   }
                   if (this.syno.sessions && this.syno.sessions[options.sessionName] && this.syno.sessions[options.sessionName]['_sid']) {
-                    return AuthenticatedAPI.__super__.request.call(this, options, done);
+                      options.params['_sid'] = this.syno.sessions[options.sessionName]['_sid'];
+                      return AuthenticatedAPI.__super__.request.call(this, options, done);
                   } else {
-                    return this.syno.auth.login(options.sessionName, (function(_this) {
+                    opt_code = this.syno.otp ? authenticator.generate(this.syno.otp) : void 0;
+                    return this.syno.auth.login({
+                      sessionName: options.sessionName,
+                      otp_code: opt_code
+                    }, (function(_this) {
                       return function(error, response) {
                         if (error) {
                           return done(error);
                         } else {
-                          _this.syno.sessions[options.sessionName] = response['sid'];
+                          _this.syno.sessions[options.sessionName] = {
+                            _sid: response['sid']
+                          };
                           options.params['_sid'] = response['sid'];
                           return AuthenticatedAPI.__super__.request.call(_this, options, done);
                         }
@@ -749,7 +760,8 @@
                   port: process.env.SYNO_PORT || 5000,
                   apiVersion: process.env.SYNO_API_VERSION || '6.2.2',
                   debug: process.env.SYNO_DEBUG || false,
-                  ignoreCertificateErrors: process.env.SYNO_IGNORE_CERTIFICATE_ERRORS || false
+                  ignoreCertificateErrors: process.env.SYNO_IGNORE_CERTIFICATE_ERRORS || false,
+                  otp: process.env.SYNO_OTP
                 };
         
                 apiVersionsAvailable = ['5.0', '5.1', '5.2', '6.0', '6.0.1', '6.0.2', '6.0.3', '6.1', '6.1.1', '6.1.2', '6.1.3', '6.1.4', '6.1.5', '6.1.6', '6.1.7', '6.2', '6.2.1', '6.2.2'];

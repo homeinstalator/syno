@@ -41,7 +41,8 @@
     "nconf": "^0.10.0",
     "ospath": "^1.2.2",
     "pluralize": "^8.0.0",
-    "request": "^2.79.0"
+    "request": "^2.79.0",
+    "otplib": "^11.0.0",
   },
   "devDependencies": {
     "brfs": "^2.0.2",

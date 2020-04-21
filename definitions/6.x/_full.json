@@ -18842,6 +18842,24 @@
       ],
       "3": [
         {
+          "shutdown": {
+            "grantByUser": false,
+            "grantable": true
+          }
+        },
+        {
+          "reboot": {
+            "grantByUser": false,
+            "grantable": true
+          }
+        },
+        {
+          "reset": {
+            "grantByUser": false,
+            "grantable": true
+          }
+        },
+        {
           "info": {
             "allowUser": [
               "admin.local",

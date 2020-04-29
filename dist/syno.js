@@ -75,6 +75,9 @@
                         error.response = response;
                         return done(error);
                       }
+                      if (response.headers['content-type'] === 'image/jpeg'){
+                        return done(null,  body);
+                      }
                       if (!body.success || (body.success && body.data && body.data instanceof Array && body.data[0] && body.data[0].error)) {
                         code = body.error ? body.error.code : body.data[0].error;
                         error = new Error(_this.error(code, api));

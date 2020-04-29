@@ -62,6 +62,7 @@
                   }, params);
                   return this.syno.request({
                     url: url,
+                    encoding: 'binary',
                     qs: qs
                   }, (function(_this) {
                     return function(error, response, body) {

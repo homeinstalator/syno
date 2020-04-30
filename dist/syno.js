@@ -53,8 +53,9 @@
                     done = noop;
                   }
                   ref1 = this.syno, protocol = ref1.protocol, host = ref1.host, port = ref1.port;
-                  api = options.api, version = options.version, path = options.path, method = options.method, params = options.params;
+                  api = options.api, version = options.params.version || options.version, path = options.path, method = options.method, params = options.params;
                   url = protocol + "://" + host + ":" + port + "/webapi/" + path;
+                  if ('version' in options.params) delete options.params.version;
                   qs = defaults({
                     api: api,
                     version: version,

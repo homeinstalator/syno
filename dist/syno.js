@@ -45,7 +45,7 @@
                 }
         
                 API.prototype.request = function(options, done) {
-                  var api, host, method, params, path, port, protocol, qs, ref1, url, version;
+                  var api, host, method, params, path, port, protocol, qs, ref1, url, version, encoding;
                   if (options == null) {
                     options = {};
                   }
@@ -60,9 +60,12 @@
                     version: version,
                     method: method
                   }, params);
+                  if(method === 'GetSnapshot'){
+                    encoding = 'binary';
+                  }
                   return this.syno.request({
                     url: url,
-                    encoding: 'binary',
+                    encoding: encoding,
                     qs: qs
                   }, (function(_this) {
                     return function(error, response, body) {

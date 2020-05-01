@@ -61,7 +61,7 @@
                     version: version,
                     method: method
                   }, params);
-                  if(method === 'GetSnapshot'){
+                  if (method === 'GetSnapshot' || method === 'getsongcover'){
                     encoding = 'binary';
                   }
                   return this.syno.request({

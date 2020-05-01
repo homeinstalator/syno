@@ -9075,7 +9075,7 @@
     "appPriv": "SYNO.SDS.SurveillanceStation",
     "authLevel": 2,
     "lib": "/var/packages/SurveillanceStation/target/webapi/Camera/src/SYNO.SurveillanceStation.Camera.so",
-    "maxVersion": 7,
+    "maxVersion": 9,
     "methods": {
       "1": [
         {

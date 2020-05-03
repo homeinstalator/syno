@@ -215,9 +215,9 @@
                     account: this.syno.account,
                     passwd: this.syno.passwd,
                     session: sessionName,
-                    format: 'sid',
-                    otp_code: otp_code
+                    format: 'sid'
                   };
+                  if(otp_code) params.otp_code = otp_code;
                   if (!this.syno.sessions) {
                     this.syno.sessions = {};
                   }
@@ -311,7 +311,7 @@
                       options.params['_sid'] = this.syno.sessions[options.sessionName]['_sid'];
                       return AuthenticatedAPI.__super__.request.call(this, options, done);
                   } else {
-                    opt_code = this.syno.otp ? authenticator.generate(this.syno.otp) : void 0;
+                    opt_code = this.syno.otp ? authenticator.generate(this.syno.otp) : false;
                     return this.syno.auth.login({
                       sessionName: options.sessionName,
                       otp_code: opt_code

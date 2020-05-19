@@ -45,7 +45,7 @@
                 }
         
                 API.prototype.request = function(options, done) {
-                  var api, host, method, params, path, port, protocol, qs, ref1, url, version, encoding;
+                  var api, host, method, params, path, port, protocol, qs, ref1, url, version, encoding, cookies;
                   if (options == null) {
                     options = {};
                   }
@@ -56,6 +56,11 @@
                   api = options.api, version = options.params.version || options.version, path = options.path, method = options.method, params = options.params;
                   url = protocol + "://" + host + ":" + port + "/webapi/" + path;
                   if ('version' in options.params) delete options.params.version;
+                  if (params._sid){
+                    cookies = params._sid;
+                    delete params._sid;
+                    delete params.format;
+                  }
                   qs = defaults({
                     api: api,
                     version: version,
@@ -67,7 +72,10 @@
                   return this.syno.request({
                     url: url,
                     encoding: encoding,
-                    qs: qs
+                    qs: qs,
+                    headers:  {
+                        Cookie: "id=" + cookies
+                    }
                   }, (function(_this) {
                     return function(error, response, body) {
                       var code;
